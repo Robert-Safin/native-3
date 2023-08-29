@@ -1,12 +1,18 @@
 import { FC } from "react";
 import Meal from "../models/meal";
 import { Image, Platform, Pressable, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { ScreenNames } from "../App";
 
 interface Props {
   meal: Meal;
 }
 
 const MealItem: FC<Props> = (props) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<ScreenNames, "MealDetails">>();
+
   return (
     <View
       style={{
@@ -24,18 +30,26 @@ const MealItem: FC<Props> = (props) => {
         shadowRadius: 8,
       }}
     >
-      <Pressable android_ripple={{color:'gray'}}
-      style={({pressed})=> [
-        {
-          opacity: pressed ? 0.5 : 1,
-        }
-      ]}
+      <Pressable
+        android_ripple={{ color: "gray" }}
+        style={({ pressed }) => [
+          {
+            opacity: pressed ? 0.5 : 1,
+          },
+        ]}
+        onPress={() => {
+          navigation.navigate("MealDetails", {
+            mealId: props.meal.id,
+          });
+        }}
       >
         <View>
-          <View style={{
-            borderRadius: 10,
-            overflow: "hidden",
-          }}>
+          <View
+            style={{
+              borderRadius: 10,
+              overflow: "hidden",
+            }}
+          >
             <Image
               source={{ uri: props.meal.imageUrl }}
               style={{
